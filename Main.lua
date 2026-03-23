@@ -7,7 +7,6 @@ local flying=false
 local flySpeed=50
 local flyConnection
 local mobileInput={forward=false,back=false,left=false,right=false,up=false,down=false}
-
 local function getFlyDir()
 local cam=workspace.CurrentCamera
 local d=Vector3.zero
@@ -19,7 +18,6 @@ if UserInputService:IsKeyDown(Enum.KeyCode.Space)or mobileInput.up then d+=Vecto
 if UserInputService:IsKeyDown(Enum.KeyCode.Q)or mobileInput.down then d-=Vector3.new(0,1,0)end
 return d
 end
-
 local function startFly()
 local char=LocalPlayer.Character if not char then return end
 local hrp=char:FindFirstChild("HumanoidRootPart")
@@ -35,7 +33,6 @@ bv.VelocityConstraintMode=Enum.VelocityConstraintMode.Vector
 bv.MaxForce=1e6 bv.RelativeTo=Enum.ActuatorRelativeTo.World
 bv.VectorVelocity=Vector3.zero bv.Parent=hrp
 end
-
 local ba=Instance.new("AlignOrientation")
 ba.Name="FlyGyro" ba.Mode=Enum.OrientationAlignmentMode.OneAttachment
 ba.Attachment0=att ba.MaxTorque=1e6 ba.Responsiveness=50
@@ -50,7 +47,6 @@ if v then v.VectorVelocity=v.VectorVelocity:Lerp(t,math.min(1,dt*12))end
 if g then g.CFrame=workspace.CurrentCamera.CFrame end
 end)
 end
-
 local function stopFly()
 flying=false
 if flyConnection then flyConnection:Disconnect()flyConnection=nil end
@@ -65,7 +61,6 @@ end end
 local godMode=false local godConn
 local noclip=false local noclipConn
 local infiniteJump=false
-
 local function toggleGod(state)
 godMode=state
 local char=LocalPlayer.Character if not char then return end
@@ -89,7 +84,6 @@ if noclipConn then noclipConn:Disconnect()noclipConn=nil end
 local char=LocalPlayer.Character if not char then return end
 for _,p in ipairs(char:GetDescendants())do
 if p:IsA("BasePart")then p.CanCollide=true end end end end
-
 local function setSpeed(v)
 local char=LocalPlayer.Character if not char then return end
 local hum=char:FindFirstChildOfClass("Humanoid")if hum then hum.WalkSpeed=v end end
@@ -106,7 +100,6 @@ task.wait(0.5)
 if flying then startFly()end
 if godMode then toggleGod(true)end
 if noclip then toggleNoclip(true)end end)
-
 local SG=Instance.new("ScreenGui")
 SG.Name="CosmicHub" SG.ResetOnSpawn=false
 SG.IgnoreGuiInset=true
@@ -133,7 +126,6 @@ UserInputService.InputChanged:Connect(function(i)
 if td and(i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch)then
 local d=i.Position-tds
 TB.Position=UDim2.new(tsp.X.Scale,tsp.X.Offset+d.X,tsp.Y.Scale,tsp.Y.Offset+d.Y)end end)
-
 local Main=Instance.new("Frame")
 Main.Size=UDim2.new(0,460,0,420)
 Main.Position=UDim2.new(0.5,-230,0.5,-210)
@@ -161,7 +153,6 @@ Ttl.BackgroundTransparency=1
 Ttl.TextColor3=Color3.fromRGB(255,255,255)
 Ttl.TextSize=14 Ttl.Font=Enum.Font.GothamBold
 Ttl.TextXAlignment=Enum.TextXAlignment.Left Ttl.Parent=Hdr
-
 local CB=Instance.new("TextButton")
 CB.Text="X" CB.Size=UDim2.new(0,30,0,30)
 CB.Position=UDim2.new(1,-35,0,3)
@@ -180,7 +171,6 @@ tbl.FillDirection=Enum.FillDirection.Horizontal
 tbl.SortOrder=Enum.SortOrder.LayoutOrder
 local panels={} local tbBtns={}
 local tabNames={"Combat","Movement","NDS","Misc"}
-
 for i,n in ipairs(tabNames)do
 local T=Instance.new("TextButton")
 T.Text=n T.Size=UDim2.new(0,115,1,0)
@@ -205,7 +195,6 @@ for j,p in ipairs(panels)do
 p.Visible=j==i
 tbBtns[j].TextColor3=j==i and Color3.fromRGB(229,57,53)or Color3.fromRGB(150,150,150)
 end end)end
-
 local SB=Instance.new("ScrollingFrame")
 SB.Size=UDim2.new(0,110,1,-108)
 SB.Position=UDim2.new(0,0,0,66)
@@ -229,7 +218,6 @@ B.TextXAlignment=Enum.TextXAlignment.Left
 B.LayoutOrder=i B.Parent=SB
 Instance.new("UIPadding",B).PaddingLeft=UDim.new(0,12)
 sbBtns[i]=B end
-
 local scrollMap={[1]=0,[2]=44,[3]=88,[4]=132,[5]=204,[6]=260,[7]=316}
 local function setSide(idx)
 for i,b in ipairs(sbBtns)do
@@ -244,7 +232,6 @@ for i,b in ipairs(sbBtns)do
 b.MouseButton1Click:Connect(function()setSide(i)end)
 b.InputEnded:Connect(function(inp)
 if inp.UserInputType==Enum.UserInputType.Touch then setSide(i)end end)end
-
 local function makeToggle(parent,label,order,callback)
 local Row=Instance.new("Frame")
 Row.Size=UDim2.new(1,0,0,44)Row.BackgroundTransparency=1
@@ -281,7 +268,6 @@ TweenService:Create(Knob,TweenInfo.new(0.15),{Position=on and UDim2.new(0,21,0.5
 callback(on)end
 Tog.MouseButton1Click:Connect(flip)
 Tog.InputEnded:Connect(function(i)if i.UserInputType==Enum.UserInputType.Touch then flip()end end)end
-
 local function makeSlider(parent,label,order,mn,mx,def,callback)
 local C=Instance.new("Frame")
 C.Size=UDim2.new(1,0,0,56)C.BackgroundTransparency=1
@@ -340,7 +326,6 @@ Track.InputEnded:Connect(function(i)
 if i.UserInputType==Enum.UserInputType.Touch then drag=false end end)
 UserInputService.InputChanged:Connect(function(i)
 if drag and i.UserInputType==Enum.UserInputType.Touch then upd(i.Position.X)end end)end
-
 local NP=panels[3]
 local function secHdr(txt,ord)
 local F=Instance.new("Frame")
@@ -361,7 +346,6 @@ secHdr("SPEED & POWER",6)
 makeSlider(NP,"Walk Speed",7,16,150,16,function(v)setSpeed(v)end)
 makeSlider(NP,"Jump Power",8,50,300,50,function(v)setJump(v)end)
 makeSlider(NP,"Fly Speed",9,10,200,50,function(v)flySpeed=v end)
-
 local function makeDBtn(parent,txt,x,y,w,h,key)
 local b=Instance.new("TextButton")
 b.Size=UDim2.new(0,w,0,h)b.Position=UDim2.new(0,x,0,y)
